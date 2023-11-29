@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "start:dev": "SERVER_PORT=3000 npx nodemon",
+    "start:dev": "npx nodemon",
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node ./build/index.js",
     "test": "jest"
@@ -13,6 +13,8 @@
   "author": "tobysimone",
   "license": "ISC",
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2"
   },
   "devDependencies": {

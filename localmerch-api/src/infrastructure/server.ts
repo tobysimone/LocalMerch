@@ -1,10 +1,12 @@
 import express, { Express } from 'express';
+import { configureExpressMiddleware } from '../middleware/express.middleware';
 
-class Server {
+class ExpressServer {
     private expressInstance: Express;
 
     constructor() {
         this.expressInstance = express();
+        configureExpressMiddleware(this.expressInstance);
     }
 
     public get() {
@@ -12,10 +14,11 @@ class Server {
     }
 
     public start() {
-        this.expressInstance.listen(3000, () => {
-            console.log('Server started at http://localhost:3000');
+        const port = process.env.SERVER_PORT;
+        this.expressInstance.listen(port, () => {
+            console.log(`Server started at http://localhost:${port}`);
         });
     }
 }
 
-export default new Server();
+export default new ExpressServer();
