@@ -15,13 +15,19 @@ export class LmSupabase implements DataProvider {
         }
 
         this.instance = createClient<Database>(supabaseProjectUrl, supabaseKey);
+        console.debug('Supabase instance created');
     }
 
     public async insert<R>(table: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']): Promise<InsertResult<R>> {
-        const { data, error } = await this.instance.from(table)
+        const { data, error } = await this.instance
+            .from(table)
             .insert(value)
             .select('*')
             .single();
+
+        if(error) {
+            console.error(error);
+        }
 
         return {
             data: data,

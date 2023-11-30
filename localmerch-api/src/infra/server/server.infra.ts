@@ -5,6 +5,7 @@ class ExpressServer {
 
     constructor() {
         this.instance = express();
+        this.instance.use(express.json());
     }
 
     public get() {

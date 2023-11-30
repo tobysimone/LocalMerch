@@ -3,8 +3,10 @@ import { Supabase } from '../infra/supabase/supabase.infra';
 import { ShopService } from './shop.service';
 
 const app = server.get();
-const { createShop } = new ShopService(Supabase);
+const shopService = new ShopService(Supabase);
 
-app.post('/shop', (request, response) => {
-    createShop(request.body).then((result) => {});
+app.post('/shop', async (request, response) => {
+    console.log(request);
+    const createdShop = await shopService.createShop(request.body);
+    return response.status(200).json(createdShop);
 });

@@ -16,5 +16,13 @@ describe('ShopService', () => {
 
       expect(createdShop.data).toEqual(shopData);
     });
+
+    it('should return an error if the shop name is not provided', async () => {
+      const shopData = { name: '' };
+
+      const createdShop = await shopService.createShop(shopData);
+
+      expect(createdShop.error).toEqual(new Error('Shop name is required'));
+    });
   });
 });
