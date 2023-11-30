@@ -14,7 +14,7 @@ describe('ShopService', () => {
 
       const createdShop = await shopService.createShop(shopData);
 
-      expect(createdShop).toEqual(shopData);
+      expect(createdShop.data).toEqual(shopData);
     });
   });
 });

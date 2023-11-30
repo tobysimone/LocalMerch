@@ -1,15 +1,13 @@
-import { Database } from "../../../@types/database-generated.types";
-import { DataProvider } from "../../data/DataProvider";
+import { DataProvider, InsertResult } from "../../data/DataProvider";
 
 export class MockShopDataProvider implements DataProvider {
     private mockData: any = [];
 
-    insert(_: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']): any {
+    async insert<R>(_: any, value: any): Promise<InsertResult<R>> {
         this.mockData.push(value);
         return {
-            select: () => ({
-                single: () => value
-            })
-        }
+            data: value,
+            error: null
+        };
     }
 }

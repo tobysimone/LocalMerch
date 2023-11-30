@@ -1,8 +1,11 @@
-import { Database } from "../../@types/database-generated.types";
+export type InsertResult<T> = {
+    data: T;
+    error: any;
+}
 
 export interface DataProvider {
-    insert: (
-        table: keyof Database['public']['Tables'], 
-        value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']
-    ) => any;
+    insert<R>(
+        table: string, 
+        value: any
+    ): Promise<InsertResult<R>>;
 }

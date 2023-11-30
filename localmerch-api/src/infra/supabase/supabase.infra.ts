@@ -1,6 +1,6 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database.types";
-import { DataProvider } from "../data/DataProvider";
+import { DataProvider, InsertResult } from "../data/DataProvider";
 
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;
@@ -17,12 +17,16 @@ export class LmSupabase implements DataProvider {
         this.instance = createClient<Database>(supabaseProjectUrl, supabaseKey);
     }
 
-    public insert(table: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']) {
-        return this.instance.from(table).insert(value);
-    }
+    public async insert<R>(table: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']): Promise<InsertResult<R>> {
+        const { data, error } = await this.instance.from(table)
+            .insert(value)
+            .select('*')
+            .single();
 
-    public get() {
-        return this.instance;
+        return {
+            data: data,
+            error
+        };
     }
 }
 
