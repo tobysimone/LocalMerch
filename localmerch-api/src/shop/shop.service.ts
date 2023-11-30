@@ -1,5 +1,5 @@
 import { Insert } from "../@types/database.types";
-import { DataProvider } from "../infra/supabase/supabase.infra";
+import { DataProvider } from "../infra/data/DataProvider";
 
 export class ShopService {
     constructor(private dp: DataProvider) {}

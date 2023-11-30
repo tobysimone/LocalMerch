@@ -5,7 +5,7 @@ describe('ShopService', () => {
   let dp = {
     insert: jest.fn().mockReturnValue({
       select: jest.fn().mockReturnValue({
-        single: jest.fn().mockReturnThis(),
+        single: jest.fn().mockReturnValue({ name: 'test' }),
       }),
     }),
   }
@@ -20,7 +20,7 @@ describe('ShopService', () => {
 
       const createdShop = await shopService.createShop(shopData);
 
-      expect(createdShop).toBeDefined();
+      expect(createdShop).toEqual(shopData);
     });
   });
 });
