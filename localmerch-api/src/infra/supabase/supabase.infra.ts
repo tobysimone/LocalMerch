@@ -1,19 +1,19 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database.types";
 
-export interface DataProvider {
-    insert: (table: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']) => any;
-}
-
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;
 
-    constructor(supabaseKey: string | undefined) {
+    constructor(supabaseProjectUrl: string | undefined, supabaseKey: string | undefined) {
         if(!supabaseKey) {
             throw new Error('SUPABASE_KEY is not defined');
         }
 
-        this.instance = createClient<Database>('https://rtfbojnxphwgmqnkwpyj.supabase.co', supabaseKey);
+        if(!supabaseProjectUrl) {
+            throw new Error('SUPABASE_PROJECT_URL is not defined');
+        }
+
+        this.instance = createClient<Database>(supabaseProjectUrl, supabaseKey);
     }
 
     public insert(table: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']) {
@@ -25,4 +25,4 @@ export class LmSupabase implements DataProvider {
     }
 }
 
-export const Supabase = new LmSupabase(process.env.SUPABASE_KEY);
+export const Supabase = new LmSupabase(process.env.SUPABASE_PROJECT_URL, process.env.SUPABASE_KEY);
