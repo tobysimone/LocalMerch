@@ -1,5 +1,4 @@
 import './config/service.config';
-import server from './infrastructure/server';
-import './test/test';
+import server from './infra/server/server.infra';
 
 server.start();

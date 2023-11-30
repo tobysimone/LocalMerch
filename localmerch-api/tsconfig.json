@@ -11,8 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,
-    "skipLibCheck": true,
-    "typeRoots": ["./@types"]
+    "skipLibCheck": true
   },
   "exclude": ["jest.config.js", "babel.config.js"]
 }
