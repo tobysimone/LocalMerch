@@ -1,4 +1,4 @@
-import { MockShopDataProvider } from '../infra/supabase/__mocks__/supabase.infra.mock';
+import { MockShopDataProvider } from '../infrastructure/supabase/__mocks__/supabase.infrastructure.mock';
 import { ShopService } from './shop.service';
 
 describe('ShopService', () => {

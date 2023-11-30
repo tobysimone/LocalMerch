@@ -1,12 +1,13 @@
-import server from '../infra/server/server.infra';
-import { Supabase } from '../infra/supabase/supabase.infra';
+import server from '../infrastructure/server/server.infrastructure';
+import { Supabase } from '../infrastructure/supabase/supabase.infrastructure';
+import { validate } from '../infrastructure/validator/schemaValidator.infrastructure';
+import { createShop } from './shop.schema';
 import { ShopService } from './shop.service';
 
 const app = server.get();
 const shopService = new ShopService(Supabase);
 
-app.post('/shop', async (request, response) => {
-    console.log(request);
+app.post('/shop', validate(createShop), async (request, response) => {
     const createdShop = await shopService.createShop(request.body);
     return response.status(200).json(createdShop);
 });

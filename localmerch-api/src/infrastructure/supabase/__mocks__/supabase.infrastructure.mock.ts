@@ -1,4 +1,4 @@
-import { DataProvider, InsertResult } from "../../data/DataProvider";
+import { DataProvider, InsertResult } from "../../data/DataProvider.infrastructure";
 
 export class MockShopDataProvider implements DataProvider {
     private mockData: any = [];

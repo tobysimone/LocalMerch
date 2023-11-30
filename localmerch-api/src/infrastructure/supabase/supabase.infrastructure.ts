@@ -1,6 +1,6 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database.types";
-import { DataProvider, InsertResult } from "../data/DataProvider";
+import { DataProvider, InsertResult } from "../data/DataProvider.infrastructure";
 
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;

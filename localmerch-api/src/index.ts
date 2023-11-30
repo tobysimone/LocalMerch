@@ -1,5 +1,5 @@
 import './config/service.config';
+import server from './infrastructure/server/server.infrastructure';
 import './routes';
-import server from './infra/server/server.infra';
 
 server.start();

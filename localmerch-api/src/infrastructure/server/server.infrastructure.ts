@@ -1,5 +1,4 @@
 import express, { Express } from 'express';
-import { configure as configureMiddleware } from '../middleware/express.middleware';
 
 class ExpressServer {
     private instance: Express;
@@ -7,7 +6,6 @@ class ExpressServer {
     constructor() {
         this.instance = express();
         this.instance.use(express.json());
-        configureMiddleware(this.instance);
     }
 
     public get() {
