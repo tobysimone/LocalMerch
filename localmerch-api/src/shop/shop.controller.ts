@@ -6,5 +6,5 @@ const app = server.get();
 const { createShop } = new ShopService(Supabase);
 
 app.post('/shop', (request, response) => {
-    createShop(request.body).then((result) => {});    
+    createShop(request.body).then((result) => {});
 });
