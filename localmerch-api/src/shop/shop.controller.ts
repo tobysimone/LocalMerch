@@ -1,6 +1,6 @@
 import server from '../infrastructure/server/server.infrastructure';
 import { Supabase } from '../infrastructure/supabase/supabase.infrastructure';
-import { validate } from '../infrastructure/validator/schemaValidator.infrastructure';
+import { validate } from '../infrastructure/validation/schemaValidator.infrastructure';
 import { createShop } from './shop.schema';
 import { ShopService } from './shop.service';
 
