@@ -1,17 +1,11 @@
+import { MockShopDataProvider } from '../infra/supabase/__mocks__/supabase.infra.mock';
 import { ShopService } from './shop.service';
 
 describe('ShopService', () => {
   let shopService: ShopService;
-  let dp = {
-    insert: jest.fn().mockReturnValue({
-      select: jest.fn().mockReturnValue({
-        single: jest.fn().mockReturnValue({ name: 'test' }),
-      }),
-    }),
-  }
 
   beforeEach(() => {
-    shopService = new ShopService(dp);
+    shopService = new ShopService(new MockShopDataProvider());
   });
 
   describe('createShop', () => {
