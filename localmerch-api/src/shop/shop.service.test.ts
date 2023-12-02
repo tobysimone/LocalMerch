@@ -1,3 +1,4 @@
+import { InsertShop, Shop } from '../@types/database.types';
 import { MockShopDataProvider } from '../infrastructure/supabase/__mocks__/supabase.infrastructure.mock';
 import { ShopService } from './shop.service';
 
@@ -10,7 +11,7 @@ describe('ShopService', () => {
 
   describe('createShop', () => {
     it('should insert a new shop and return the inserted data', async () => {
-      const shopData = { name: 'test' };
+      const shopData: InsertShop = { name: 'test', user_id: '1' };
 
       const createdShop = await shopService.createShop(shopData);
 
@@ -18,7 +19,7 @@ describe('ShopService', () => {
     });
 
     it('should return an error if the shop name is not provided', async () => {
-      const shopData = { name: '' };
+      const shopData: InsertShop = { name: '', user_id: '1' };
 
       const createdShop = await shopService.createShop(shopData);
 

@@ -1,6 +1,6 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database.types";
-import { DataProvider, InsertResult } from "../data/DataProvider.infrastructure";
+import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
 
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;
@@ -18,6 +18,29 @@ export class LmSupabase implements DataProvider {
         console.debug('Supabase instance created');
     }
 
+    getById<R>(table: keyof Database['public']['Tables'], id: number): Promise<GetByIdResult<R>>;
+    getById<R>(table: keyof Database['public']['Tables'], id: number, idColumn: string): Promise<GetByIdResult<R>>;
+    public async getById<R>(table: keyof Database['public']['Tables'], id: number, idColumn: string = 'id'): Promise<GetByIdResult<R>> {
+        if(!idColumn) {
+            idColumn = 'id';
+        }
+        
+        const { data, error } = await this.instance
+            .from(table)
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        if(error) {
+            console.error(error);
+        }
+
+        return {
+            data,
+            error
+        }
+    }
+
     public async insert<R>(table: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']): Promise<InsertResult<R>> {
         const { data, error } = await this.instance
             .from(table)
@@ -30,7 +53,24 @@ export class LmSupabase implements DataProvider {
         }
 
         return {
-            data: data,
+            data,
+            error
+        };
+    }
+
+    public async upsert<R>(table: keyof Database['public']['Tables'], value: Database['public']['Tables'][keyof Database['public']['Tables']]['Insert']): Promise<InsertResult<R>> {
+        const { data, error } = await this.instance
+            .from(table)
+            .upsert(value)
+            .select('*')
+            .single();
+
+        if(error) {
+            console.error(error);
+        }
+
+        return {
+            data,
             error
         };
     }
