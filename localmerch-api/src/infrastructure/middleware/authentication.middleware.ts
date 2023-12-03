@@ -43,8 +43,8 @@ export async function authenticationMiddleware(request: any, response: any, next
     next();
 }
 
-function canAccessRoute(route: RouteConfig, role: UserKeyRole) {
-    switch(route.apiKeyRole.toLowerCase()) {
+function canAccessRoute(routeConfig: RouteConfig, role: UserKeyRole) {
+    switch(routeConfig.apiKeyRole.toLowerCase()) {
         case 'admin':
             return role === 'admin';
         case 'shop':

@@ -1,6 +1,7 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database/database.types";
 import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
+import { ServerError } from "../server/serverError";
 
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;
@@ -33,7 +34,7 @@ export class LmSupabase implements DataProvider {
             .single();
             
         if(error) {
-            console.error(error);
+            throw new ServerError(error.message, 500);
         }
 
         return {
@@ -56,7 +57,7 @@ export class LmSupabase implements DataProvider {
             .single();
         
         if(error) {
-            console.error(error);
+            throw new ServerError(error.message, 500);
         }
 
         return {
@@ -73,7 +74,7 @@ export class LmSupabase implements DataProvider {
             .single();
 
         if(error) {
-            console.error(error);
+            throw new ServerError(error.message, 500);
         }
 
         return {
@@ -90,7 +91,7 @@ export class LmSupabase implements DataProvider {
             .single();
 
         if(error) {
-            console.error(error);
+            throw new ServerError(error.message, 500);
         }
 
         return {

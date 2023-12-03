@@ -15,6 +15,5 @@ export const routeConfigs: RouteConfig[] = [
 
 
 export function getRouteConfig(route: string, method: string = 'get', routeConfigs: RouteConfig[]): RouteConfig | undefined {
-    console.log(route + ' ' + method.toLowerCase());
     return routeConfigs.find(config => config.route === route && config.method.toLowerCase() === method.toLowerCase());
 }

@@ -1,6 +1,8 @@
 import express, { Express } from 'express';
 import helmet from 'helmet';
 import { authenticationMiddleware } from '../middleware/authentication.middleware';
+import { serverErrorMiddleware } from '../middleware/serverError.middleware';
+import { loadRoutes } from '../../routes';
 
 class ExpressServer {
     private instance: Express;
@@ -12,6 +14,8 @@ class ExpressServer {
         this.instance.use(express.json());
         this.instance.use(helmet());
         this.instance.use(authenticationMiddleware);
+        loadRoutes(this.instance);
+        this.instance.use(serverErrorMiddleware);
     }
 
     public get() {
