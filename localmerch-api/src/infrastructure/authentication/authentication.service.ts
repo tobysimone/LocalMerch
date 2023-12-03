@@ -1,5 +1,5 @@
-import { InsertUserKey, Query, UserKey } from "../../@types/database.types";
-import { generateKeyPair } from "../../util/cryptoUtil";
+import { InsertUserKey, UserKey } from "../../@types/database/database.types";
+import { generateKeyPair } from "../../util/crypto/cryptoUtil";
 import { DataProvider } from "../data/DataProvider.infrastructure";
 import { ApiKeys } from "./ApiKeys";
 
@@ -16,9 +16,9 @@ export class AuthenticationService {
         return data;
     }
     
-    async updateUserApiKeys(userId: number, apiKeys: ApiKeys): Promise<UserKey | null> {
+    async updateUserApiKeys(userId: string, apiKeys: ApiKeys): Promise<UserKey | null> {
         const userKey: InsertUserKey = {
-            user_id: String(userId),
+            user_id: userId,
             public_key: apiKeys.publicKey,
             secret_key: apiKeys.secretKey
         }

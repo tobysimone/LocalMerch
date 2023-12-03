@@ -1,4 +1,4 @@
-import { InsertShop, Shop } from "../@types/database.types";
+import { InsertShop, Shop } from "../@types/database/database.types";
 import { DataProvider, InsertResult } from "../infrastructure/data/DataProvider.infrastructure";
 
 export class ShopService {

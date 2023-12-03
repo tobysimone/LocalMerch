@@ -1,4 +1,4 @@
-import { InsertShop, Shop } from '../@types/database.types';
+import { InsertShop } from '../@types/database/database.types';
 import { MockShopDataProvider } from '../infrastructure/supabase/__mocks__/supabase.infrastructure.mock';
 import { ShopService } from './shop.service';
 

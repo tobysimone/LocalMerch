@@ -1,5 +1,5 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { Database } from "../../@types/database.types";
+import { Database } from "../../@types/database/database.types";
 import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
 
 export class LmSupabase implements DataProvider {
@@ -22,7 +22,7 @@ export class LmSupabase implements DataProvider {
         if(!eqKey || !eqValue) {
             return {
                 data: null,
-                error: new Error('eqKey or eqValue is not defined');
+                error: new Error('eqKey or eqValue is not defined')
             };
         }
 
@@ -31,6 +31,7 @@ export class LmSupabase implements DataProvider {
             .select('*')
             .eq(eqKey, eqValue)
             .single();
+            
         if(error) {
             console.error(error);
         }

@@ -1,5 +1,6 @@
 import express, { Express } from 'express';
 import helmet from 'helmet';
+import { authenticationMiddleware } from '../middleware/authentication.middleware';
 
 class ExpressServer {
     private instance: Express;
@@ -9,7 +10,8 @@ class ExpressServer {
 
         this.instance.disable('x-powered-by');
         this.instance.use(express.json());
-        this.instance.use(helmet())
+        this.instance.use(helmet());
+        this.instance.use(authenticationMiddleware);
     }
 
     public get() {
