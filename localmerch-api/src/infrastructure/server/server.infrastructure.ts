@@ -1,11 +1,15 @@
 import express, { Express } from 'express';
+import helmet from 'helmet';
 
 class ExpressServer {
     private instance: Express;
 
     constructor() {
         this.instance = express();
+
+        this.instance.disable('x-powered-by');
         this.instance.use(express.json());
+        this.instance.use(helmet())
     }
 
     public get() {

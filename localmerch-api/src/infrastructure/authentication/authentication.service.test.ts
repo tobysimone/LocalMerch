@@ -70,4 +70,11 @@ describe('AuthenticationService', () => {
         expect(userKey?.public_key.length).toEqual(86);
         expect(userKey?.secret_key.length).toEqual(86);
     });
+
+    it('authentication service getApiKeysFromPublicKey method returns null if ApiKeys do not exist', async () => {
+        const userId = 1;
+        await authenticationService.updateUserApiKeys(userId, authenticationService.generateApiKeys());
+        const userKey = await authenticationService.getApiKeysFromPublicKey('');
+        expect(userKey).toBeUndefined();
+    });
 });

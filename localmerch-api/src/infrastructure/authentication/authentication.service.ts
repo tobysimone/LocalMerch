@@ -9,6 +9,10 @@ export class AuthenticationService {
 
     async getApiKeysFromPublicKey(publicKey: string): Promise<UserKey | null> {
         const { data, error } = await this.dp.getByEqQuery<UserKey>('user_key', 'public_key', publicKey);
+        if(error) {
+            return null;
+        }
+        
         return data;
     }
     

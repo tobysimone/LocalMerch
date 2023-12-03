@@ -18,6 +18,29 @@ export class LmSupabase implements DataProvider {
         console.debug('Supabase instance created');
     }
 
+    async getByEqQuery<R>(table: string, eqKey: string, eqValue: string): Promise<GetByIdResult<R>> {
+        if(!eqKey || !eqValue) {
+            return {
+                data: null,
+                error: new Error('eqKey or eqValue is not defined');
+            };
+        }
+
+        const { data, error } = await this.instance
+            .from(table)
+            .select('*')
+            .eq(eqKey, eqValue)
+            .single();
+        if(error) {
+            console.error(error);
+        }
+
+        return {
+            data,
+            error
+        }
+    }
+
     getById<R>(table: keyof Database['public']['Tables'], id: number): Promise<GetByIdResult<R>>;
     getById<R>(table: keyof Database['public']['Tables'], id: number, idColumn: string): Promise<GetByIdResult<R>>;
     public async getById<R>(table: keyof Database['public']['Tables'], id: number, idColumn: string = 'id'): Promise<GetByIdResult<R>> {
