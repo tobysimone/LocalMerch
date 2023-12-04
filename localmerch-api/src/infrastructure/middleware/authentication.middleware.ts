@@ -1,24 +1,26 @@
 import crypto from 'crypto';
 import { UserKeyRole } from '../../@types/authentication/UserKeyRole.type';
 import { UserKey } from "../../@types/database/database.types";
+import { RouteConfig } from '../../@types/server/RouteConfig.type';
+import { getRouteConfig, routeConfigs } from '../../config/routes/route.config';
 import { AuthenticationService } from "../authentication/authentication.service";
 import { Supabase } from "../supabase/supabase.infrastructure";
-import { RouteConfig } from '../../@types/server/RouteConfig.type';
-import { getRouteConfig, routeConfigs } from '../../config/endpoint.config';
+import { log, warn } from '../logging/logger.infrastructure';
+import { error } from 'console';
 
 const authenticationService = new AuthenticationService(Supabase);
 
 export async function authenticationMiddleware(request: any, response: any, next: any) {
     const publicKey = getPublicKeyFromRequest(request);
     if(!publicKey) {
-        console.info(`No public key provided`);
+        warn(`No public key provided`);
         sendUnauthorizedResponse(response);
         return;
     }
 
     const userKey = await getSecretKey(publicKey);
     if(userKey === null) {
-        console.info(`No user key found for public key ${publicKey}`);
+        warn(`No user key found for public key ${publicKey}`);
         sendUnauthorizedResponse(response);
         return;
     }
@@ -27,7 +29,7 @@ export async function authenticationMiddleware(request: any, response: any, next
     const formattedBody = JSON.stringify(request.body).replace(/\s/g, '');
     const isSignatureValid = verifyRequestSignature(userKey.secret_key, signature, formattedBody);
     if(!isSignatureValid) {
-        console.error(`Invalid signature provided`);
+        error(`Invalid signature provided`);
         sendUnauthorizedResponse(response);
         return;
     }
@@ -35,7 +37,7 @@ export async function authenticationMiddleware(request: any, response: any, next
     const role = userKey.role.toLowerCase() as UserKeyRole;
     const routeConfig = getRouteConfig(request.url, request.method, routeConfigs);
     if(!routeConfig || !canAccessRoute(routeConfig, role)) {
-        console.info(`User with role ${role} is not allowed to access route ${routeConfig?.route}`);
+        error(`User with role ${role} is not allowed to access route ${routeConfig?.route}`);
         sendUnauthorizedResponse(response);
         return;
     }
@@ -58,7 +60,7 @@ function canAccessRoute(routeConfig: RouteConfig, role: UserKeyRole) {
 
 function verifyRequestSignature(secretKey: string, signature: string, message: string): boolean {
     if(!secretKey || !signature || !message) {
-        console.error(`Invalid signature provided. Secret: ${secretKey}, Signature: ${signature}, Message: ${JSON.stringify(message)}`);
+        error(`Invalid signature provided. Secret: ${secretKey}, Signature: ${signature}, Message: ${JSON.stringify(message)}`);
         return false;
     }
 
@@ -80,13 +82,13 @@ function getPublicKeyFromRequest(request: any) {
 
 function getBearerValue(bearerToken: string) {
     if (!bearerToken) {
-        console.debug(`No bearer token provided`);
+        log(`No bearer token provided`);
         return null;
     }
 
     const bearerTokenParts = bearerToken.split(' ');
     if(bearerTokenParts.length !== 2 || bearerTokenParts[0] !== 'Bearer') {
-        console.info(`Invalid bearer token provided`);
+        warn(`Invalid bearer token provided`);
         return null;
     }
 

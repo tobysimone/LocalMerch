@@ -1,4 +1,4 @@
-import { RouteConfig } from "../@types/server/RouteConfig.type";
+import { RouteConfig } from "../../@types/server/RouteConfig.type";
 
 export const routeConfigs: RouteConfig[] = [
     {

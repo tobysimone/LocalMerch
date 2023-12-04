@@ -2,6 +2,7 @@ import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database/database.types";
 import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
 import { ServerError } from "../server/serverError";
+import { log } from "../logging/logger.infrastructure";
 
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;
@@ -16,7 +17,7 @@ export class LmSupabase implements DataProvider {
         }
 
         this.instance = createClient<Database>(supabaseProjectUrl, supabaseKey);
-        console.debug('Supabase instance created');
+        log('Supabase instance created');
     }
 
     async getByEqQuery<R>(table: string, eqKey: string, eqValue: string): Promise<GetByIdResult<R>> {

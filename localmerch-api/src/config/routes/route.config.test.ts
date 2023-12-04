@@ -1,5 +1,5 @@
-import { RouteConfig } from '../@types/server/RouteConfig.type';
-import { getRouteConfig } from './endpoint.config';
+import { RouteConfig } from '../../@types/server/RouteConfig.type';
+import { getRouteConfig } from './route.config';
 
 describe('getRouteConfig', () => {
     const routeConfigs: RouteConfig[] = [
