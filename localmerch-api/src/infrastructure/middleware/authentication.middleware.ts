@@ -1,12 +1,12 @@
+import { error } from 'console';
 import crypto from 'crypto';
 import { UserKeyRole } from '../../@types/authentication/UserKeyRole.type';
 import { UserKey } from "../../@types/database/database.types";
 import { RouteConfig } from '../../@types/server/RouteConfig.type';
 import { getRouteConfig, routeConfigs } from '../../config/routes/route.config';
 import { AuthenticationService } from "../authentication/authentication.service";
-import { Supabase } from "../supabase/supabase.infrastructure";
 import { log, warn } from '../logging/logger.infrastructure';
-import { error } from 'console';
+import { Supabase } from "../supabase/supabase.infrastructure";
 
 const authenticationService = new AuthenticationService(Supabase);
 
@@ -73,7 +73,7 @@ function verifyRequestSignature(secretKey: string, signature: string, message: s
 }
 
 async function getSecretKey(publicKey: string): Promise<UserKey | null> {
-    return await authenticationService.getApiKeysFromPublicKey(publicKey);
+    return await authenticationService.getApiKey(publicKey);
 }
 
 function getPublicKeyFromRequest(request: any) {

@@ -13,32 +13,32 @@ describe('AuthenticationService', () => {
     });
 
     it('authentication service has a generateApiKeys method', () => {
-        expect(authenticationService.generateApiKeys).toBeDefined();
+        expect(authenticationService.generateApiKey).toBeDefined();
     });
 
     it('authentication service generateApiKeys method returns an object with two strings', () => {
-        const apiKeys = authenticationService.generateApiKeys();
+        const apiKeys = authenticationService.generateApiKey();
         expect(typeof apiKeys).toEqual('object');
     });
 
     it('authentication service generateApiKeys method returns object with two strings of length 84', () => {
-        const apiKeys = authenticationService.generateApiKeys();
+        const apiKeys = authenticationService.generateApiKey();
         expect(apiKeys.publicKey.length).toEqual(86);
         expect(apiKeys.secretKey.length).toEqual(86);
     });
 
     it('authentication service has an updateUserApiKeys method', () => {
-        expect(authenticationService.updateUserApiKeys).toBeDefined();
+        expect(authenticationService.createApiKey).toBeDefined();
     });
 
     it('authentication service has an updateUserApiKeys method that takes userId and ApiKeys as a parameter', () => {
         const userId = '1';
-        expect(authenticationService.updateUserApiKeys(userId, { publicKey: '', secretKey: '' })).toBeDefined();
+        expect(authenticationService.createApiKey(userId, { publicKey: '', secretKey: '' })).toBeDefined();
     });
 
     it('authentication service updateUserApiKeys method returns ApiKeys objects', async () => {
         const userId = '1';
-        const apiKeys = await authenticationService.updateUserApiKeys(userId, authenticationService.generateApiKeys());
+        const apiKeys = await authenticationService.createApiKey(userId, authenticationService.generateApiKey());
         expect(apiKeys).toBeDefined();
         expect(apiKeys?.public_key).toBeDefined();
         expect(apiKeys?.secret_key).toBeDefined();
@@ -46,24 +46,24 @@ describe('AuthenticationService', () => {
 
     it('authentication service updateUserApiKeys method returns ApiKeys objects with two strings of length 84', async () => {
         const userId = '1';
-        const apiKeys = await authenticationService.updateUserApiKeys(userId, authenticationService.generateApiKeys());
+        const apiKeys = await authenticationService.createApiKey(userId, authenticationService.generateApiKey());
         expect(apiKeys?.public_key.length).toEqual(86);
         expect(apiKeys?.secret_key.length).toEqual(86);
     });
 
     it('authentication service has a getApiKeysFromPublicKey method', () => {
-        expect(authenticationService.getApiKeysFromPublicKey).toBeDefined();
+        expect(authenticationService.getApiKey).toBeDefined();
     });
 
     it('authentication service getApiKeysFromPublicKey method returns null if no ApiKeys exist', async () => {
-        const apiKeys = await authenticationService.getApiKeysFromPublicKey('');
+        const apiKeys = await authenticationService.getApiKey('');
         expect(apiKeys).toBeUndefined();
     });
 
     it('authentication service getApiKeysFromPublicKey method returns ApiKeys object if ApiKeys exist', async () => {
         const userId = '1';
-        const apiKeys = await authenticationService.updateUserApiKeys(userId, authenticationService.generateApiKeys());
-        const userKey = await authenticationService.getApiKeysFromPublicKey(apiKeys?.public_key ?? '');
+        const apiKeys = await authenticationService.createApiKey(userId, authenticationService.generateApiKey());
+        const userKey = await authenticationService.getApiKey(apiKeys?.public_key ?? '');
         expect(userKey).toBeDefined();
         expect(userKey?.public_key).toBeDefined();
         expect(userKey?.secret_key).toBeDefined();
@@ -73,8 +73,8 @@ describe('AuthenticationService', () => {
 
     it('authentication service getApiKeysFromPublicKey method returns null if ApiKeys do not exist', async () => {
         const userId = '1';
-        await authenticationService.updateUserApiKeys(userId, authenticationService.generateApiKeys());
-        const userKey = await authenticationService.getApiKeysFromPublicKey('');
+        await authenticationService.createApiKey(userId, authenticationService.generateApiKey());
+        const userKey = await authenticationService.getApiKey('');
         expect(userKey).toBeUndefined();
     });
 });

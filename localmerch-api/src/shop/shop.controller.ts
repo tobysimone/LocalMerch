@@ -6,17 +6,16 @@ import { createShop } from './shop.schema';
 import { ShopService } from './shop.service';
 
 export class ShopController implements BaseController {
-
-    app: express.Express;
+    express: express.Express;
     shopService: ShopService;
 
     constructor(express: express.Express) {
-        this.app = express;
+        this.express = express;
         this.shopService = new ShopService(Supabase);
     }
 
     loadRoutes(): void {
-        this.app.post('/shop', validate(createShop), async (request, response, next) => {
+        this.express.post('/shop', validate(createShop), async (request, response, next) => {
             try {
                 const createdShop = await this.shopService.createShop(request.body);
                 return response.status(200).json(createdShop);
