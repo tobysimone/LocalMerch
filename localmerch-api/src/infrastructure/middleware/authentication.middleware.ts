@@ -73,7 +73,7 @@ function verifyRequestSignature(secretKey: string, signature: string, message: s
 }
 
 async function getSecretKey(publicKey: string): Promise<UserKey | null> {
-    return await authenticationService.getApiKey(publicKey);
+    return await authenticationService.getUserKey(publicKey);
 }
 
 function getPublicKeyFromRequest(request: any) {

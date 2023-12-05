@@ -7,16 +7,15 @@ export class AuthenticationService {
 
     constructor(private dp: DataProvider) {}
 
-    async getApiKey(publicKey: string): Promise<UserKey | null> {
+    async getUserKey(publicKey: string): Promise<{ userKey: UserKey | null, error: Error }> {
         const { data, error } = await this.dp.getByEqQuery<UserKey>('user_key', 'public_key', publicKey);
-        if(error) {
-            return null;
+        return {
+            userKey: data || null,
+            error
         }
-        
-        return data;
     }
     
-    async createApiKey(userId: string, apiKeys: ApiKey): Promise<UserKey | null> {
+    async createUserKey(userId: string, apiKeys: ApiKey): Promise<{ userKey: UserKey | null, error: Error | null }> {
         const userKey: InsertUserKey = {
             user_id: userId,
             public_key: apiKeys.publicKey,
@@ -24,10 +23,10 @@ export class AuthenticationService {
         }
         this.dp.insert('user_key', userKey);
 
-        return await this.getApiKey(apiKeys.publicKey);
+        return await this.getUserKey(apiKeys.publicKey);
     }
 
-    generateApiKey(): ApiKey {
+    generateUserKey(): ApiKey {
         return generateKeyPair();
     }
 }
