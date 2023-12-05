@@ -17,8 +17,8 @@ class ExpressServer {
         this.instance.use(helmet());
         this.instance.use(serverLoggerMiddleware);
         this.instance.use(authenticationMiddleware);
-        loadRoutes(this.instance);
         this.instance.use(serverErrorMiddleware);
+        loadRoutes(this.instance);
     }
 
     public get() {

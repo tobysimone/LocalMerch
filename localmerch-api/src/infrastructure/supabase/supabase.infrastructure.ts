@@ -3,6 +3,7 @@ import { Database } from "../../@types/database/database.types";
 import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
 import { ServerError } from "../server/serverError";
 import { log } from "../logging/logger.infrastructure";
+import { fatal } from "../../../build/infrastructure/logging/logger.infrastructure";
 
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;
