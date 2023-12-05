@@ -30,6 +30,6 @@ export function warn(warn: string) {
     Logger.getInstance().warn(warn);
 }
 
-export function fatal(error: string | Error) {
-    Logger.getInstance().error(error);
+export function fatal(error: string | Error, msg?: string) {
+    Logger.getInstance().error(error, msg);
 }

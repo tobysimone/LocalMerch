@@ -3,7 +3,6 @@ import { Database } from "../../@types/database/database.types";
 import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
 import { ServerError } from "../server/serverError";
 import { log } from "../logging/logger.infrastructure";
-import { fatal } from "../../../build/infrastructure/logging/logger.infrastructure";
 
 export class LmSupabase implements DataProvider {
     instance: SupabaseClient;
@@ -74,10 +73,6 @@ export class LmSupabase implements DataProvider {
             .insert(value)
             .select('*')
             .single();
-
-        if(error) {
-            throw new ServerError(error.message, 500);
-        }
 
         return {
             data,

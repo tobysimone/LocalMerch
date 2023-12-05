@@ -1,7 +1,6 @@
 import { InsertUserKey, UserKey } from "../../@types/database/database.types";
 import { generateKeyPair } from "../../util/crypto/cryptoUtil";
 import { DataProvider } from "../data/DataProvider.infrastructure";
-import { fatal } from "../logging/logger.infrastructure";
 import { ApiKeys as ApiKey } from "./ApiKeys";
 
 export class AuthenticationService {

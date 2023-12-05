@@ -4,6 +4,7 @@ import { validate } from '../infrastructure/validation/schemaValidator.infrastru
 import { BaseController } from '../shared/controller/BaseController';
 import { createShop } from './shop.schema';
 import { ShopService } from './shop.service';
+import { ServerError } from '../infrastructure/server/serverError';
 
 export class ShopController implements BaseController {
     express: express.Express;
@@ -18,6 +19,10 @@ export class ShopController implements BaseController {
         this.express.post('/shop', validate(createShop), async (request, response, next) => {
             try {
                 const createdShop = await this.shopService.createShop(request.body);
+                if(createdShop.error) {
+                    return next(new ServerError(createdShop.error, 500));
+                }
+
                 return response.status(200).json(createdShop);
             } catch (e) {
                 next(e);
