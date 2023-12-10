@@ -18,9 +18,9 @@ export class ShopController implements BaseController {
     loadRoutes(): void {
         this.express.post('/shop', validate(createShop), async (request, response, next) => {
             tryRoute(async () => {
-                const { 
-                    data: shop, 
-                    error 
+                const {
+                    data: shop,
+                    error
                 } = await this.shopService.createShop(request.body);
                 if(error) {
                     return next(error);

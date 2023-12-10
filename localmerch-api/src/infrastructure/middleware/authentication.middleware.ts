@@ -45,6 +45,7 @@ export async function authenticationMiddleware(request: any, response: any, next
         return;
     }
 
+
     next();
 }
 
@@ -81,21 +82,6 @@ async function getUserKeyFromPublicKey(publicKey: string): Promise<{ userKey: Us
 
 function getPublicKeyFromRequest(request: any) {
     return request.headers['public_key'];
-}
-
-function getBearerValue(bearerToken: string) {
-    if (!bearerToken) {
-        log(`No bearer token provided`);
-        return null;
-    }
-
-    const bearerTokenParts = bearerToken.split(' ');
-    if(bearerTokenParts.length !== 2 || bearerTokenParts[0] !== 'Bearer') {
-        warn(`Invalid bearer token provided`);
-        return null;
-    }
-
-    return bearerTokenParts[1];
 }
 
 function sendUnauthorizedResponse(response: any) {
