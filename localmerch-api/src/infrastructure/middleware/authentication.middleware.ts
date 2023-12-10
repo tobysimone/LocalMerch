@@ -7,6 +7,7 @@ import { getRouteConfig, routeConfigs } from '../../config/routes/route.config';
 import { AuthenticationService } from "../authentication/authentication.service";
 import { log, warn } from '../logging/logger.infrastructure';
 import { Supabase } from "../supabase/supabase.infrastructure";
+import { validateUserKey } from '../../util/authentication/userKeyUtil';
 
 const authenticationService = new AuthenticationService(Supabase);
 
@@ -18,23 +19,25 @@ export async function authenticationMiddleware(request: any, response: any, next
         return;
     }
 
-    const userKey = await getSecretKey(publicKey);
-    if(userKey === null) {
+    const getUserKey = await getUserKeyFromPublicKey(publicKey);
+    if(!getUserKey || !getUserKey?.userKey || !validateUserKey(getUserKey?.userKey)) {
         warn(`No user key found for public key ${publicKey}`);
         sendUnauthorizedResponse(response);
         return;
     }
 
+    const { secret_key: secretKey, role: userKeyRole } = getUserKey?.userKey;
+
     const signature = request.headers['signature'];
     const formattedBody = JSON.stringify(request.body).replace(/\s/g, '');
-    const isSignatureValid = verifyRequestSignature(userKey.secret_key, signature, formattedBody);
+    const isSignatureValid = verifyRequestSignature(secretKey, signature, formattedBody);
     if(!isSignatureValid) {
         error(`Invalid signature provided`);
         sendUnauthorizedResponse(response);
         return;
     }
 
-    const role = userKey.role.toLowerCase() as UserKeyRole;
+    const role = userKeyRole.toLowerCase() as UserKeyRole;
     const routeConfig = getRouteConfig(request.url, request.method, routeConfigs);
     if(!routeConfig || !canAccessRoute(routeConfig, role)) {
         error(`User with role ${role} is not allowed to access route ${routeConfig?.route}`);
@@ -72,7 +75,7 @@ function verifyRequestSignature(secretKey: string, signature: string, message: s
         crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computedSignature));
 }
 
-async function getSecretKey(publicKey: string): Promise<UserKey | null> {
+async function getUserKeyFromPublicKey(publicKey: string): Promise<{ userKey: UserKey | null, error: Error | null }> {
     return await authenticationService.getUserKey(publicKey);
 }
 

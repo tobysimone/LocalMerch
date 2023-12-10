@@ -1,13 +1,13 @@
 import { InsertUserKey, UserKey } from "../../@types/database/database.types";
 import { generateKeyPair } from "../../util/crypto/cryptoUtil";
-import { DataProvider } from "../data/DataProvider.infrastructure";
+import { DataProvider, InsertResult } from "../data/DataProvider.infrastructure";
 import { ApiKeys as ApiKey } from "./ApiKeys";
 
 export class AuthenticationService {
 
     constructor(private dp: DataProvider) {}
 
-    async getUserKey(publicKey: string): Promise<{ userKey: UserKey | null, error: Error }> {
+    async getUserKey(publicKey: string): Promise<{ userKey: UserKey | null, error: Error | null }> {
         const { data, error } = await this.dp.getByEqQuery<UserKey>('user_key', 'public_key', publicKey);
         return {
             userKey: data || null,
@@ -21,7 +21,8 @@ export class AuthenticationService {
             public_key: apiKeys.publicKey,
             secret_key: apiKeys.secretKey
         }
-        this.dp.insert('user_key', userKey);
+
+        const insertResult: InsertResult<UserKey> = await this.dp.insert('user_key', userKey);
 
         return await this.getUserKey(apiKeys.publicKey);
     }

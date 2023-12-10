@@ -4,7 +4,6 @@ import { validate } from '../infrastructure/validation/schemaValidator.infrastru
 import { BaseController } from '../shared/controller/BaseController';
 import { createShop } from './shop.schema';
 import { ShopService } from './shop.service';
-import { ServerError } from '../infrastructure/server/serverError';
 import { tryRoute } from '../util/route/tryRoute';
 
 export class ShopController implements BaseController {
@@ -23,9 +22,8 @@ export class ShopController implements BaseController {
                     data: shop, 
                     error 
                 } = await this.shopService.createShop(request.body);
-
                 if(error) {
-                    return next(new ServerError(error, 500));
+                    return next(error);
                 }
 
                 return response.status(200).json(shop);

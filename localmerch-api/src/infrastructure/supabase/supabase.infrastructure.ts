@@ -1,7 +1,7 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database/database.types";
+import { mapPsqlShopError } from "../../shop/mapPsqlShopError.mapper";
 import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
-import { ServerError } from "../server/serverError";
 import { log } from "../logging/logger.infrastructure";
 
 export class LmSupabase implements DataProvider {
@@ -33,14 +33,10 @@ export class LmSupabase implements DataProvider {
             .select('*')
             .eq(eqKey, eqValue)
             .single();
-            
-        if(error) {
-            throw new ServerError(error.message, 500);
-        }
 
         return {
             data,
-            error
+            error: mapPsqlShopError(error?.message, error?.code)
         }
     }
 
@@ -57,13 +53,9 @@ export class LmSupabase implements DataProvider {
             .eq('id', id)
             .single();
         
-        if(error) {
-            throw new ServerError(error.message, 500);
-        }
-
         return {
             data,
-            error
+            error: mapPsqlShopError(error?.message, error?.code)
         }
     }
 
@@ -76,7 +68,7 @@ export class LmSupabase implements DataProvider {
 
         return {
             data,
-            error
+            error: mapPsqlShopError(error?.message, error?.code)
         };
     }
 
@@ -87,13 +79,9 @@ export class LmSupabase implements DataProvider {
             .select('*')
             .single();
 
-        if(error) {
-            throw new ServerError(error.message, 500);
-        }
-
         return {
             data,
-            error
+            error: mapPsqlShopError(error?.message, error?.code)
         };
     }
 }
