@@ -13,5 +13,7 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "exclude": ["jest.config.js", "babel.config.js"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["jest.config.js", "babel.config.js"],
+  "files": ["./src/@types/server/ExpressRequest.type.d.ts"]
 }

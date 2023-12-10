@@ -45,6 +45,7 @@ export async function authenticationMiddleware(request: any, response: any, next
         return;
     }
 
+    request.userId = getUserKey?.userKey?.user_id;
 
     next();
 }
