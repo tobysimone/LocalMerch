@@ -21,7 +21,7 @@ export class ShopController implements BaseController {
                 const {
                     data: shop,
                     error
-                } = await this.shopService.createShop({ userId: request.userId, ...request.body });
+                } = await this.shopService.createShop({ user_id: request.userId, ...request.body });
                 if(error) {
                     return next(error);
                 }
