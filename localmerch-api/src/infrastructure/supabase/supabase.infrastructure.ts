@@ -1,6 +1,6 @@
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Database } from "../../@types/database/database.types";
-import { mapPsqlShopError } from "../../shop/mapPsqlShopError.mapper";
+import { mapPsqlShopError } from "../../shop/psqlShopError.mapper";
 import { DataProvider, GetByIdResult, InsertResult } from "../data/DataProvider.infrastructure";
 import { log } from "../logging/logger.infrastructure";
 
