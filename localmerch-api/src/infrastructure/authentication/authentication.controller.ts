@@ -15,18 +15,20 @@ export class AuthenticationController implements BaseController {
         this.authenticationService = new AuthenticationService(Supabase);
     }
 
-    loadRoutes(): void {
-        this.express.post('/user/api-key', validate(createApiKey), async (request, response, next) => {
-            tryRoute(async () => {
-                const userId = request.body.userId;
-                const apiKey = this.authenticationService.generateUserKey();
-                const { userKey, error } = await this.authenticationService.createUserKey(userId, apiKey);
-                if(error) {
-                    return next(error);
-                }
+    createApiKey(request: any, response: any, next: any) {
+        tryRoute(async () => {
+            const userId = request.body.userId;
+            const apiKey = this.authenticationService.generateUserKey();
+            const { userKey, error } = await this.authenticationService.createUserKey(userId, apiKey);
+            if(error) {
+                return next(error);
+            }
 
-                return response.status(200).json(userKey);
-            }, next);
-        });
+            return response.status(200).json(userKey);
+        }, next);
+    }
+
+    loadRoutes(): void {
+        this.express.post('/user/api-key', validate(createApiKey), async (request, response, next) => this.createApiKey(request, response, next));
     }
 }

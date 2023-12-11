@@ -1,14 +1,6 @@
 import { fatal } from "../infrastructure/logging/logger.infrastructure";
 import { ServerError } from "../infrastructure/server/serverError";
-
-const INTERNAL_SERVER_ERROR = 'Internal Server Error';
-
-const GENERIC_SERVER_ERROR: ServerError = {
-    name: INTERNAL_SERVER_ERROR,
-    message: INTERNAL_SERVER_ERROR,
-    errorDetail: INTERNAL_SERVER_ERROR,
-    statusCode: 500
-};
+import { GENERIC_SERVER_ERROR } from "../shared/response/GenericServerError";
 
 export function mapPsqlShopError(errorDetail?: string, code?: string): ServerError | null {
     if(!code && !errorDetail) {
