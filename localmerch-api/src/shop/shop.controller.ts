@@ -15,33 +15,40 @@ export class ShopController implements BaseController {
         this.shopService = new ShopService(Supabase);
     }
 
+    async createShop(request: any, response: any, next: any) {
+        tryRoute(async () => {
+            const {
+                data: shop,
+                error
+            } = await this.shopService.createShop({ user_id: request.userId, ...request.body });
+            if(error) {
+                return next(error);
+            }
+
+            return response.status(200).json(shop);
+        }, next);
+    }
+
+    async getShop(request: any, response: any, next: any) {
+        tryRoute(async () => {
+            const {
+                data: shop,
+                error
+            } = await this.shopService.getShopByUserId(request.userId);
+            if(error) {
+                return next(error);
+            }
+
+            return response.status(200).json(shop);
+        }, next);
+    }
+
     loadRoutes(): void {
-        this.express.post('/shop', validate(createShop), async (request, response, next) => {
-            tryRoute(async () => {
-                const {
-                    data: shop,
-                    error
-                } = await this.shopService.createShop({ user_id: request.userId, ...request.body });
-                if(error) {
-                    return next(error);
-                }
-
-                return response.status(200).json(shop);
-            }, next);
-        });
+        this.express.post('/shop',
+            validate(createShop),
+            async (request, response, next) => this.createShop(request, response, next));
         
-        this.express.get('/shop', async (request, response, next) => {
-            tryRoute(async () => {
-                const {
-                    data: shop,
-                    error
-                } = await this.shopService.getShopByUserId(request.userId);
-                if(error) {
-                    return next(error);
-                }
-
-                return response.status(200).json(shop);
-            }, next);
-        });
+        this.express.get('/shop',
+            async (request, response, next) => this.getShop(request, response, next));
     }
 }
