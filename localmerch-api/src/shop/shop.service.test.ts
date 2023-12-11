@@ -1,4 +1,5 @@
-import { InsertShop } from '../@types/database/database.types';
+import { InsertShop, Shop } from '../@types/database/database.types';
+import { GetByIdResult } from '../infrastructure/data/DataProvider.infrastructure';
 import { MockShopDataProvider } from '../infrastructure/supabase/__mocks__/supabase.infrastructure.mock';
 import { ShopService } from './shop.service';
 
@@ -25,5 +26,14 @@ describe('ShopService', () => {
 
       expect(createdShop.error).toEqual(new Error('Shop name is required'));
     });
+  });
+
+  it('should return the shop data for the given user ID', async () => {
+    const shopData: InsertShop = { name: 'TestShop', user_id: '1' };
+
+    await shopService.createShop(shopData);
+    const getShop = await shopService.getShopByUserId('1');
+
+    expect(getShop.data).toEqual(shopData);
   });
 });

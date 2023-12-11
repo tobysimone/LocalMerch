@@ -4,10 +4,10 @@ import { UserKeyRole } from '../../@types/authentication/UserKeyRole.type';
 import { UserKey } from "../../@types/database/database.types";
 import { RouteConfig } from '../../@types/server/RouteConfig.type';
 import { getRouteConfig, routeConfigs } from '../../config/routes/route.config';
-import { AuthenticationService } from "../authentication/authentication.service";
-import { log, warn } from '../logging/logger.infrastructure';
-import { Supabase } from "../supabase/supabase.infrastructure";
 import { validateUserKey } from '../../util/authentication/userKeyUtil';
+import { AuthenticationService } from "../authentication/authentication.service";
+import { warn } from '../logging/logger.infrastructure';
+import { Supabase } from "../supabase/supabase.infrastructure";
 
 const authenticationService = new AuthenticationService(Supabase);
 
@@ -29,8 +29,8 @@ export async function authenticationMiddleware(request: any, response: any, next
     const { secret_key: secretKey, role: userKeyRole } = getUserKey?.userKey;
 
     const signature = request.headers['signature'];
-    const formattedBody = JSON.stringify(request.body).replace(/\s/g, '');
-    const isSignatureValid = verifyRequestSignature(secretKey, signature, formattedBody);
+    const formattedRequestBody = getFormattedRequestBody(JSON.stringify(request.body));
+    const isSignatureValid = verifyRequestSignature(secretKey, signature, formattedRequestBody);
     if(!isSignatureValid) {
         error(`Invalid signature provided`);
         sendUnauthorizedResponse(response);
@@ -87,4 +87,8 @@ function getPublicKeyFromRequest(request: any) {
 
 function sendUnauthorizedResponse(response: any) {
     response.sendStatus(401);
+}
+
+function getFormattedRequestBody(body: any) {
+    return body.replace(/\s/g, '');
 }

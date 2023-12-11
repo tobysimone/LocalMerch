@@ -7,6 +7,11 @@ export const routeConfigs: RouteConfig[] = [
         apiKeyRole: 'shop'
     },
     {
+        route: '/shop',
+        method: 'get',
+        apiKeyRole: 'shop'
+    },
+    {
         route: '/user/api-key',
         method: 'post',
         apiKeyRole: 'admin'

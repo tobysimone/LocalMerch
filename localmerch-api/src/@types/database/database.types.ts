@@ -9,3 +9,6 @@ export type UserKey = Query<'user_key'>;
 
 export type InsertShop = Insert<'shop'>;
 export type Shop = Query<'shop'>;
+
+export type InsertCategory = Insert<'category'>;
+export type Category = Query<'category'>;

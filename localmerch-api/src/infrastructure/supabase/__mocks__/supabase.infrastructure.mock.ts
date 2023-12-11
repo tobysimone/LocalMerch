@@ -26,8 +26,12 @@ export class MockShopDataProvider implements DataProvider {
         throw new Error("Method not implemented.");
     }
 
-    getByEqQuery<R>(table: string, eqKey: string, eqValue: string): Promise<GetByIdResult<R>> {
-        throw new Error("Method not implemented.");
+    async getByEqQuery<R>(table: string, eqKey: string, eqValue: string): Promise<GetByIdResult<R>> {
+        const data = this.mockData.find((data: any) => data[eqKey] === eqValue);
+        return {
+            data,
+            error: null
+        };
     }
 }
 
@@ -53,7 +57,7 @@ export class MockAuthenticationServiceDataProvider implements DataProvider {
     getById<R>(table: string, id: number): Promise<GetByIdResult<R>>;
     getById<R>(table: string, id: number, idColumn: string): Promise<GetByIdResult<R>>;
     async getById<R>(table: string, id: number, idColumn?: string): Promise<GetByIdResult<R>> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             const data = this.mockData.find((data: any) => data.user_id === id);
             if(!data) {
                 return resolve({
@@ -75,5 +79,52 @@ export class MockAuthenticationServiceDataProvider implements DataProvider {
             data,
             error: null
         };
+    }
+}
+
+export class MockCategoryDataProvider implements DataProvider {
+    private mockData: any = [];
+
+    getById<R>(table: string, id: number): Promise<GetByIdResult<R>>;
+    getById<R>(table: string, id: number, idColumn: string): Promise<GetByIdResult<R>>;
+    async getById<R>(table: unknown, id: unknown, idColumn?: unknown): Promise<GetByIdResult<R>> | Promise<GetByIdResult<R>> {
+        return new Promise((resolve, _reject) => {
+            const data = this.mockData.find((data: any) => data.user_id === id);
+            if(!data) {
+                return resolve({
+                    data: null,
+                    error: new Error('User not found')
+                });
+            }
+
+            return resolve({
+                data,
+                error: null
+            });
+        });
+    }
+
+    async getByEqQuery<R>(table: string, eqKey: string, eqValue: string): Promise<GetByIdResult<R>> {
+        const data = this.mockData.find((data: any) => data[eqKey] === eqValue);
+        return {
+            data,
+            error: null
+        };
+    }
+    
+    async insert<R>(table: string, value: any): Promise<InsertResult<R>> {
+        this.mockData.push(value);
+        return {
+            data: value,
+            error: null
+        };
+    }
+    
+    async upsert<R>(table: string, value: any): Promise<UpsertResult<R>> {
+        this.mockData.push(value);
+        return {
+            data: value,
+            error: null
+        }
     }
 }
